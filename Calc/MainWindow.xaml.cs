@@ -142,7 +142,7 @@ namespace Calc
 
         private void btnSign_Click(object sender, RoutedEventArgs e)
         {
-            if (this.display.Text != "0" && this.display.Text != "error")
+            if (tryParse(this.display.Text) != 0 && this.display.Text != "error")
                 if(this.display.Text[0].ToString() == "-")
                     this.display.Text = this.display.Text.Remove(0, 1);
                 else
