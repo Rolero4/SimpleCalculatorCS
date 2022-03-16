@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Calc"
         mc:Ignorable="d"
         
-        ResizeMode="NoResize"
+        ResizeMode="CanMinimize"
         Title="Kalkulator" Height="550" Width="360" Background="#FF1B263B">
 
 

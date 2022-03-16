@@ -23,9 +23,9 @@ namespace Calc
     {
 
 
-        string number1;
-        string number2;
-        string operation;
+        string number1 = "";
+        string number2 = "";
+        string operation = "";
         public MainWindow()
         {
             InitializeComponent();
@@ -39,10 +39,20 @@ namespace Calc
         }
 
 
+        private void error()
+        {
+            number1 = "";
+            number2 = "";
+            operation = "";
+        }
+
         private string isTooBig(double value)
         {
             if (Math.Abs(value) > Double.MaxValue)
+            {
+                error();
                 return "error";
+            }
             return value.ToString();
         }
 
@@ -60,18 +70,37 @@ namespace Calc
         private void operation_click(object sender, RoutedEventArgs e)
         {
             if (this.display.Text == "error")
+            {
+                error();
                 this.display.Text = "0";
-            number1 = this.display.Text;
-            var operand = sender as Button;
-            operation = operand.Content.ToString();
-            
-            this.display.Text = "0";
+            }
+            else
+            {
+                if (operation == "")
+                {
+                    number1 = this.display.Text;
+                    var operand = sender as Button;
+                    operation = operand.Content.ToString();
+
+                    this.display.Text = "0";
+                }
+                else
+                {
+                    error();
+                    this.display.Text = "error";
+                }
+            }
         }
 
         private void equ_click(object sender, RoutedEventArgs e)
         {
             if (this.display.Text == "error")
+            {
+                error();
                 this.display.Text = "0";
+            }
+            else if (operation == "" || number1 == "")
+                this.display.Text = "error";
             else
             {
                 double num1 = tryParse(number1);
@@ -101,9 +130,11 @@ namespace Calc
                         }
                         else
                             text = "error";
+                            error();
                         break;
                 }
                 this.display.Text = text;
+                error();
             }
         }
 
@@ -111,7 +142,7 @@ namespace Calc
 
         private void btnSign_Click(object sender, RoutedEventArgs e)
         {
-            if (this.display.Text != "0")
+            if (this.display.Text != "0" && this.display.Text != "error")
                 if(this.display.Text[0].ToString() == "-")
                     this.display.Text = this.display.Text.Remove(0, 1);
                 else
@@ -136,29 +167,48 @@ namespace Calc
 
         private void btnSqu_Click(object sender, RoutedEventArgs e)
         {
-            number1 = this.display.Text;
-            double num1 = tryParse(number1);
-            double result = 0;
-            string text = "";
-            result = Math.Round(num1 * num1, 14);
-            text = isTooBig(result);
-            this.display.Text = text;
+            if (this.display.Text == "error")
+            {
+                error();
+                this.display.Text = "0";
+            }
+            else
+            {
+                number1 = this.display.Text;
+                double num1 = tryParse(number1);
+                double result = 0;
+                string text = "";
+                result = Math.Round(num1 * num1, 14);
+                text = isTooBig(result);
+                this.display.Text = text;
+            }
         }
 
         private void btn1dx_Click(object sender, RoutedEventArgs e)
         {
-            number1 = this.display.Text;
-            double num1 = tryParse(number1);
-            double result = 0;
-            string text = "";
-            if (num1 != 0)
+            if (this.display.Text == "error")
             {
-                result = Math.Round(1 / num1, 14);
-                text = isTooBig(result);
+                error();
+                this.display.Text = "0";
             }
             else
-                text = "error";
-            this.display.Text = text;
+            {
+                number1 = this.display.Text;
+                double num1 = tryParse(number1);
+                double result = 0;
+                string text = "";
+                if (num1 != 0)
+                {
+                    result = Math.Round(1 / num1, 14);
+                    text = isTooBig(result);
+                }
+                else
+                {
+                    text = "error";
+                    error();
+                }
+                this.display.Text = text;
+            }
         }
 
         private void btnCom_Click(object sender, RoutedEventArgs e)
